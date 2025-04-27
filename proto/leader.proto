@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package leader;
+
+service NodeService {
+  rpc Heartbeat (NodeStatus) returns (Ack) {}
+  rpc AssignTask (Task) returns (Ack) {}
+}
+
+message NodeStatus {
+  string node_id = 1;
+  float score = 2;
+  int32 queue_length = 3;
+}
+
+message Task {
+  int32 task_id = 1;
+  int32 duration_ms = 2;
+}
+
+message Ack {
+  string message = 1;
+}
