@@ -7,6 +7,8 @@
 #include <queue>
 #include <string>
 #include <thread>
+#include <vector>
+#include <unordered_map>
 
 class NodeServiceImpl final : public leader::NodeService::Service {
 public:
@@ -25,12 +27,16 @@ public:
 
 private:
     std::string node_id_;
+    std::string leader_id_;
     std::queue<leader::Task> task_queue_;
     std::mutex queue_mutex_;
     float current_score_;
+    std::unordered_map<std::string, float> peer_scores_; // new: keep scores from peers
+    std::vector<std::string> peer_addresses_;
 
     void ProcessTasks();
     void SendHeartbeatToPeer(const std::string& peer_address);
+    void ElectionLoop();
 };
 
 #endif // NODE_SERVER_H

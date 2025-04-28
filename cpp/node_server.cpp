@@ -10,8 +10,14 @@ NodeServiceImpl::NodeServiceImpl(const std::string& node_id)
 grpc::Status NodeServiceImpl::Heartbeat(grpc::ServerContext*,
                                         const leader::NodeStatus* request,
                                         leader::Ack* reply) {
+    {
+        std::lock_guard<std::mutex> lock(queue_mutex_);
+        peer_scores_[request->node_id()] = request->score();  // Save peer's score
+    }
+
     std::cout << "[HEARTBEAT] Received from " << request->node_id()
               << " Score: " << request->score() << "\n";
+
     reply->set_message("ACK");
     return grpc::Status::OK;
 }
@@ -65,9 +71,11 @@ void NodeServiceImpl::SendHeartbeatToPeer(const std::string& peer_address) {
 }
 
 void NodeServiceImpl::StartHeartbeatLoop(const std::vector<std::string>& peers) {
-    std::thread([this, peers]() {
+    peer_addresses_ = peers;  // save peers for election use
+
+    std::thread([this]() {
         while (true) {
-            for (const auto& peer : peers) {
+            for (const auto& peer : peer_addresses_) {
                 if (peer != node_id_) {
                     SendHeartbeatToPeer(peer);
                 }
@@ -75,6 +83,37 @@ void NodeServiceImpl::StartHeartbeatLoop(const std::vector<std::string>& peers) 
             std::this_thread::sleep_for(std::chrono::seconds(2));
         }
     }).detach();
+
+    std::thread([this]() {
+        ElectionLoop();
+    }).detach();
+}
+
+void NodeServiceImpl::ElectionLoop() {
+    while (true) {
+        std::this_thread::sleep_for(std::chrono::seconds(5)); // run election every 5s
+
+        std::lock_guard<std::mutex> lock(queue_mutex_);
+
+        std::string best_node = node_id_;
+        float best_score = current_score_;
+
+        for (const auto& [peer_id, score] : peer_scores_) {
+            if (score > best_score) {
+                best_node = peer_id;
+                best_score = score;
+            }
+        }
+
+        if (leader_id_ != best_node) {
+            leader_id_ = best_node;
+            if (leader_id_ == node_id_) {
+                std::cout << "[LEADER] I am elected as the new leader!\n";
+            } else {
+                std::cout << "[INFO] New leader elected: " << leader_id_ << "\n";
+            }
+        }
+    }
 }
 
 void NodeServiceImpl::Run(const std::string& server_address) {
