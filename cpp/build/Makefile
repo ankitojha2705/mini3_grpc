@@ -117,24 +117,38 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named server
+# Target rules for targets named node_server
 
 # Build rule for target.
-server: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 server
-.PHONY : server
+node_server: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 node_server
+.PHONY : node_server
 
 # fast build rule for target.
-server/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/build
-.PHONY : server/fast
+node_server/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/build
+.PHONY : node_server/fast
+
+#=============================================================================
+# Target rules for targets named test_client
+
+# Build rule for target.
+test_client: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 test_client
+.PHONY : test_client
+
+# fast build rule for target.
+test_client/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/build
+.PHONY : test_client/fast
 
 leader.grpc.pb.o: leader.grpc.pb.cc.o
 .PHONY : leader.grpc.pb.o
 
 # target to build an object file
 leader.grpc.pb.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/leader.grpc.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/leader.grpc.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/leader.grpc.pb.cc.o
 .PHONY : leader.grpc.pb.cc.o
 
 leader.grpc.pb.i: leader.grpc.pb.cc.i
@@ -142,7 +156,8 @@ leader.grpc.pb.i: leader.grpc.pb.cc.i
 
 # target to preprocess a source file
 leader.grpc.pb.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/leader.grpc.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/leader.grpc.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/leader.grpc.pb.cc.i
 .PHONY : leader.grpc.pb.cc.i
 
 leader.grpc.pb.s: leader.grpc.pb.cc.s
@@ -150,7 +165,8 @@ leader.grpc.pb.s: leader.grpc.pb.cc.s
 
 # target to generate assembly for a file
 leader.grpc.pb.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/leader.grpc.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/leader.grpc.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/leader.grpc.pb.cc.s
 .PHONY : leader.grpc.pb.cc.s
 
 leader.pb.o: leader.pb.cc.o
@@ -158,7 +174,8 @@ leader.pb.o: leader.pb.cc.o
 
 # target to build an object file
 leader.pb.cc.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/leader.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/leader.pb.cc.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/leader.pb.cc.o
 .PHONY : leader.pb.cc.o
 
 leader.pb.i: leader.pb.cc.i
@@ -166,7 +183,8 @@ leader.pb.i: leader.pb.cc.i
 
 # target to preprocess a source file
 leader.pb.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/leader.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/leader.pb.cc.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/leader.pb.cc.i
 .PHONY : leader.pb.cc.i
 
 leader.pb.s: leader.pb.cc.s
@@ -174,7 +192,8 @@ leader.pb.s: leader.pb.cc.s
 
 # target to generate assembly for a file
 leader.pb.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/leader.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/leader.pb.cc.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/leader.pb.cc.s
 .PHONY : leader.pb.cc.s
 
 node.o: node.cpp.o
@@ -182,7 +201,7 @@ node.o: node.cpp.o
 
 # target to build an object file
 node.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/node.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/node.cpp.o
 .PHONY : node.cpp.o
 
 node.i: node.cpp.i
@@ -190,7 +209,7 @@ node.i: node.cpp.i
 
 # target to preprocess a source file
 node.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/node.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/node.cpp.i
 .PHONY : node.cpp.i
 
 node.s: node.cpp.s
@@ -198,7 +217,7 @@ node.s: node.cpp.s
 
 # target to generate assembly for a file
 node.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/node.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/node.cpp.s
 .PHONY : node.cpp.s
 
 node_server.o: node_server.cpp.o
@@ -206,7 +225,7 @@ node_server.o: node_server.cpp.o
 
 # target to build an object file
 node_server.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/node_server.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/node_server.cpp.o
 .PHONY : node_server.cpp.o
 
 node_server.i: node_server.cpp.i
@@ -214,7 +233,7 @@ node_server.i: node_server.cpp.i
 
 # target to preprocess a source file
 node_server.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/node_server.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/node_server.cpp.i
 .PHONY : node_server.cpp.i
 
 node_server.s: node_server.cpp.s
@@ -222,15 +241,39 @@ node_server.s: node_server.cpp.s
 
 # target to generate assembly for a file
 node_server.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/node_server.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/node_server.cpp.s
 .PHONY : node_server.cpp.s
+
+test_client.o: test_client.cpp.o
+.PHONY : test_client.o
+
+# target to build an object file
+test_client.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/test_client.cpp.o
+.PHONY : test_client.cpp.o
+
+test_client.i: test_client.cpp.i
+.PHONY : test_client.i
+
+# target to preprocess a source file
+test_client.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/test_client.cpp.i
+.PHONY : test_client.cpp.i
+
+test_client.s: test_client.cpp.s
+.PHONY : test_client.s
+
+# target to generate assembly for a file
+test_client.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/test_client.dir/build.make CMakeFiles/test_client.dir/test_client.cpp.s
+.PHONY : test_client.cpp.s
 
 utils.o: utils.cpp.o
 .PHONY : utils.o
 
 # target to build an object file
 utils.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/utils.cpp.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/utils.cpp.o
 .PHONY : utils.cpp.o
 
 utils.i: utils.cpp.i
@@ -238,7 +281,7 @@ utils.i: utils.cpp.i
 
 # target to preprocess a source file
 utils.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/utils.cpp.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/utils.cpp.i
 .PHONY : utils.cpp.i
 
 utils.s: utils.cpp.s
@@ -246,7 +289,7 @@ utils.s: utils.cpp.s
 
 # target to generate assembly for a file
 utils.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/server.dir/build.make CMakeFiles/server.dir/utils.cpp.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/node_server.dir/build.make CMakeFiles/node_server.dir/utils.cpp.s
 .PHONY : utils.cpp.s
 
 # Help Target
@@ -257,7 +300,8 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... server"
+	@echo "... node_server"
+	@echo "... test_client"
 	@echo "... leader.grpc.pb.o"
 	@echo "... leader.grpc.pb.i"
 	@echo "... leader.grpc.pb.s"
@@ -270,6 +314,9 @@ help:
 	@echo "... node_server.o"
 	@echo "... node_server.i"
 	@echo "... node_server.s"
+	@echo "... test_client.o"
+	@echo "... test_client.i"
+	@echo "... test_client.s"
 	@echo "... utils.o"
 	@echo "... utils.i"
 	@echo "... utils.s"

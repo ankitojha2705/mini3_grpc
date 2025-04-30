@@ -1,3 +1,4 @@
-/Users/ankitojha/mini3/cpp/build/CMakeFiles/server.dir
+/Users/ankitojha/mini3/cpp/build/CMakeFiles/node_server.dir
+/Users/ankitojha/mini3/cpp/build/CMakeFiles/test_client.dir
 /Users/ankitojha/mini3/cpp/build/CMakeFiles/edit_cache.dir
 /Users/ankitojha/mini3/cpp/build/CMakeFiles/rebuild_cache.dir

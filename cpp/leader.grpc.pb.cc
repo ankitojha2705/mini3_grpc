@@ -24,6 +24,8 @@ namespace leader {
 static const char* NodeService_method_names[] = {
   "/leader.NodeService/Heartbeat",
   "/leader.NodeService/AssignTask",
+  "/leader.NodeService/RequestWork",
+  "/leader.NodeService/TransferWork",
 };
 
 std::unique_ptr< NodeService::Stub> NodeService::NewStub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options) {
@@ -35,6 +37,8 @@ std::unique_ptr< NodeService::Stub> NodeService::NewStub(const std::shared_ptr< 
 NodeService::Stub::Stub(const std::shared_ptr< ::grpc::ChannelInterface>& channel, const ::grpc::StubOptions& options)
   : channel_(channel), rpcmethod_Heartbeat_(NodeService_method_names[0], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   , rpcmethod_AssignTask_(NodeService_method_names[1], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_RequestWork_(NodeService_method_names[2], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
+  , rpcmethod_TransferWork_(NodeService_method_names[3], options.suffix_for_stats(),::grpc::internal::RpcMethod::NORMAL_RPC, channel)
   {}
 
 ::grpc::Status NodeService::Stub::Heartbeat(::grpc::ClientContext* context, const ::leader::NodeStatus& request, ::leader::Ack* response) {
@@ -83,6 +87,52 @@ void NodeService::Stub::async::AssignTask(::grpc::ClientContext* context, const 
   return result;
 }
 
+::grpc::Status NodeService::Stub::RequestWork(::grpc::ClientContext* context, const ::leader::WorkRequest& request, ::leader::WorkResponse* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::leader::WorkRequest, ::leader::WorkResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_RequestWork_, context, request, response);
+}
+
+void NodeService::Stub::async::RequestWork(::grpc::ClientContext* context, const ::leader::WorkRequest* request, ::leader::WorkResponse* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::leader::WorkRequest, ::leader::WorkResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RequestWork_, context, request, response, std::move(f));
+}
+
+void NodeService::Stub::async::RequestWork(::grpc::ClientContext* context, const ::leader::WorkRequest* request, ::leader::WorkResponse* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_RequestWork_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::leader::WorkResponse>* NodeService::Stub::PrepareAsyncRequestWorkRaw(::grpc::ClientContext* context, const ::leader::WorkRequest& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::leader::WorkResponse, ::leader::WorkRequest, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_RequestWork_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::leader::WorkResponse>* NodeService::Stub::AsyncRequestWorkRaw(::grpc::ClientContext* context, const ::leader::WorkRequest& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncRequestWorkRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
+::grpc::Status NodeService::Stub::TransferWork(::grpc::ClientContext* context, const ::leader::Task& request, ::leader::Ack* response) {
+  return ::grpc::internal::BlockingUnaryCall< ::leader::Task, ::leader::Ack, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), rpcmethod_TransferWork_, context, request, response);
+}
+
+void NodeService::Stub::async::TransferWork(::grpc::ClientContext* context, const ::leader::Task* request, ::leader::Ack* response, std::function<void(::grpc::Status)> f) {
+  ::grpc::internal::CallbackUnaryCall< ::leader::Task, ::leader::Ack, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_TransferWork_, context, request, response, std::move(f));
+}
+
+void NodeService::Stub::async::TransferWork(::grpc::ClientContext* context, const ::leader::Task* request, ::leader::Ack* response, ::grpc::ClientUnaryReactor* reactor) {
+  ::grpc::internal::ClientCallbackUnaryFactory::Create< ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(stub_->channel_.get(), stub_->rpcmethod_TransferWork_, context, request, response, reactor);
+}
+
+::grpc::ClientAsyncResponseReader< ::leader::Ack>* NodeService::Stub::PrepareAsyncTransferWorkRaw(::grpc::ClientContext* context, const ::leader::Task& request, ::grpc::CompletionQueue* cq) {
+  return ::grpc::internal::ClientAsyncResponseReaderHelper::Create< ::leader::Ack, ::leader::Task, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(channel_.get(), cq, rpcmethod_TransferWork_, context, request);
+}
+
+::grpc::ClientAsyncResponseReader< ::leader::Ack>* NodeService::Stub::AsyncTransferWorkRaw(::grpc::ClientContext* context, const ::leader::Task& request, ::grpc::CompletionQueue* cq) {
+  auto* result =
+    this->PrepareAsyncTransferWorkRaw(context, request, cq);
+  result->StartCall();
+  return result;
+}
+
 NodeService::Service::Service() {
   AddMethod(new ::grpc::internal::RpcServiceMethod(
       NodeService_method_names[0],
@@ -104,6 +154,26 @@ NodeService::Service::Service() {
              ::leader::Ack* resp) {
                return service->AssignTask(ctx, req, resp);
              }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      NodeService_method_names[2],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< NodeService::Service, ::leader::WorkRequest, ::leader::WorkResponse, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](NodeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::leader::WorkRequest* req,
+             ::leader::WorkResponse* resp) {
+               return service->RequestWork(ctx, req, resp);
+             }, this)));
+  AddMethod(new ::grpc::internal::RpcServiceMethod(
+      NodeService_method_names[3],
+      ::grpc::internal::RpcMethod::NORMAL_RPC,
+      new ::grpc::internal::RpcMethodHandler< NodeService::Service, ::leader::Task, ::leader::Ack, ::grpc::protobuf::MessageLite, ::grpc::protobuf::MessageLite>(
+          [](NodeService::Service* service,
+             ::grpc::ServerContext* ctx,
+             const ::leader::Task* req,
+             ::leader::Ack* resp) {
+               return service->TransferWork(ctx, req, resp);
+             }, this)));
 }
 
 NodeService::Service::~Service() {
@@ -117,6 +187,20 @@ NodeService::Service::~Service() {
 }
 
 ::grpc::Status NodeService::Service::AssignTask(::grpc::ServerContext* context, const ::leader::Task* request, ::leader::Ack* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status NodeService::Service::RequestWork(::grpc::ServerContext* context, const ::leader::WorkRequest* request, ::leader::WorkResponse* response) {
+  (void) context;
+  (void) request;
+  (void) response;
+  return ::grpc::Status(::grpc::StatusCode::UNIMPLEMENTED, "");
+}
+
+::grpc::Status NodeService::Service::TransferWork(::grpc::ServerContext* context, const ::leader::Task* request, ::leader::Ack* response) {
   (void) context;
   (void) request;
   (void) response;

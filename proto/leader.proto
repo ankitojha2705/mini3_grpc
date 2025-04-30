@@ -5,19 +5,39 @@ package leader;
 service NodeService {
   rpc Heartbeat (NodeStatus) returns (Ack) {}
   rpc AssignTask (Task) returns (Ack) {}
+  rpc RequestWork (WorkRequest) returns (WorkResponse) {}
+  rpc TransferWork (Task) returns (Ack) {}
 }
 
 message NodeStatus {
   string node_id = 1;
   float score = 2;
   int32 queue_length = 3;
+  float cpu_utilization = 4;
+  float memory_utilization = 5;
+  int64 last_heartbeat_time = 6;
+  bool is_leader = 7;
 }
 
 message Task {
   int32 task_id = 1;
   int32 duration_ms = 2;
+  string source_node = 3;
+  int32 steal_count = 4;
+}
+
+message WorkRequest {
+  string requester_id = 1;
+  int32 max_tasks = 2;
+  int32 max_steal_count = 3;
+}
+
+message WorkResponse {
+  repeated Task tasks = 1;
+  bool success = 2;
 }
 
 message Ack {
   string message = 1;
+  bool success = 2;
 }

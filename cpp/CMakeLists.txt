@@ -3,36 +3,19 @@ project(Mini3LeaderConsensus)
 
 set(CMAKE_CXX_STANDARD 17)
 
-# Directories
-set(Protobuf_INCLUDE_DIR "/usr/local/protobuf-21/include")
-set(Protobuf_LIB_DIR "/usr/local/protobuf-21/lib")
-set(GRPC_INCLUDE_DIR "/opt/homebrew/include")
-set(GRPC_LIB_DIR "/opt/homebrew/lib")
-set(ABSL_INCLUDE_DIR "/opt/homebrew/include")
-set(ABSL_LIB_DIR "/opt/homebrew/lib")
-
 # Include directories
 include_directories(
-  ${Protobuf_INCLUDE_DIR}
-  ${GRPC_INCLUDE_DIR}
-  ${ABSL_INCLUDE_DIR}
-  ${CMAKE_CURRENT_SOURCE_DIR}
+    /opt/homebrew/include
+    ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 # Link directories
 link_directories(
-  ${Protobuf_LIB_DIR}
-  ${GRPC_LIB_DIR}
-  ${ABSL_LIB_DIR}
+    /opt/homebrew/lib
 )
 
-# Proto Files
-set(PROTO_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/leader.proto
-)
-
-# Executable
-add_executable(server
+# Node server executable
+add_executable(node_server
     node.cpp
     node_server.cpp
     utils.cpp
@@ -40,13 +23,18 @@ add_executable(server
     leader.grpc.pb.cc
 )
 
-# Correct linking with absl libraries
-target_link_libraries(server
-    /usr/local/protobuf-21/lib/libprotobuf.a
-    /usr/local/protobuf-21/lib/libprotoc.a
+# Test client executable
+add_executable(test_client
+    test_client.cpp
+    leader.pb.cc
+    leader.grpc.pb.cc
+)
+
+# Common libraries
+set(COMMON_LIBS
+    protobuf
     grpc++
     grpc
-    grpc++_reflection
     gpr
     absl_strings
     absl_synchronization
@@ -66,4 +54,9 @@ target_link_libraries(server
     absl_cord_internal
     absl_cordz_info
     absl_cordz_functions
+    pthread
 )
+
+# Link libraries
+target_link_libraries(node_server ${COMMON_LIBS})
+target_link_libraries(test_client ${COMMON_LIBS})

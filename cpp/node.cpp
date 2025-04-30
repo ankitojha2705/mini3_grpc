@@ -22,7 +22,7 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    std::string node_id = argv[1];          // e.g., "localhost:50051"
+    std::string node_id = argv[1];          // e.g., "localhost:5001"
     std::string peers_file = argv[2];       // e.g., "peers.txt"
 
     // Load peers
