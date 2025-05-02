@@ -32,6 +32,7 @@ grpc::Status NodeServiceImpl::Heartbeat(grpc::ServerContext*,
 grpc::Status NodeServiceImpl::AssignTask(grpc::ServerContext*,
                                          const leader::Task* request,
                                          leader::Ack* reply) {
+    // GPT-Generated: Burst test logic
     std::cout << "\n=== Task Assignment Request ===" << std::endl;
     std::cout << "Task ID: " << request->task_id() << std::endl;
     std::cout << "Duration: " << request->duration_ms() << "ms" << std::endl;
@@ -307,7 +308,7 @@ void NodeServiceImpl::Run(const std::string& server_address) {
     server->Wait();
     task_thread.join();
 }
-
+// GPT-Generated: Burst test logic
 void NodeServiceImpl::ProcessTask(const leader::Task& task) {
     std::cout << "\n=== Processing Task ===" << std::endl;
     std::cout << "Task ID: " << task.task_id() << std::endl;

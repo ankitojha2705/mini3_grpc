@@ -10,7 +10,7 @@
 using grpc::Channel;
 using grpc::ClientContext;
 using grpc::Status;
-
+// GPT-Generated: TestClient class
 class TestClient {
 public:
     TestClient(const std::string& server_address) 
@@ -18,6 +18,7 @@ public:
             grpc::CreateChannel(server_address, grpc::InsecureChannelCredentials()))) {}
 
     bool SendTask(int task_id, int duration_ms) {
+        // GPT-Generated: Task sending logic
         std::cout << "\n=== Sending Task ===" << std::endl;
         std::cout << "Task ID: " << task_id << std::endl;
         std::cout << "Duration: " << duration_ms << "ms" << std::endl;
@@ -43,7 +44,7 @@ public:
         }
     }
 
-    // Get node status
+    // GPT-Generated: Node status retrieval logic
     bool GetNodeStatus() {
         leader::NodeStatus status;
         status.set_node_id("client");
@@ -64,7 +65,7 @@ public:
 private:
     std::unique_ptr<leader::NodeService::Stub> stub_;
 };
-
+// GPT-Generated: Burst test logic
 void runBurstTest(TestClient& client, int num_tasks, int burst_interval_ms) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -84,7 +85,7 @@ void runBurstTest(TestClient& client, int num_tasks, int burst_interval_ms) {
     
     std::cout << "\n=== Burst Test Complete ===\n" << std::endl;
 }
-
+// GPT-Generated: Burst test logic
 void runGradualLoadTest(TestClient& client, int num_tasks, int interval_ms) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -104,7 +105,7 @@ void runGradualLoadTest(TestClient& client, int num_tasks, int interval_ms) {
     
     std::cout << "\n=== Gradual Load Test Complete ===\n" << std::endl;
 }
-
+// GPT-Generated: Burst test logic
 void runLongTaskTest(TestClient& client, int num_tasks) {
     std::cout << "\n=== Starting Long Task Test ===" << std::endl;
     std::cout << "Number of tasks: " << num_tasks << std::endl;
