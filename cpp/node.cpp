@@ -22,8 +22,8 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    std::string node_id = argv[1];          // e.g., "localhost:5001"
-    std::string peers_file = argv[2];       // e.g., "peers.txt"
+    std::string node_id = argv[1];          
+    std::string peers_file = argv[2];       
 
     // Load peers
     std::vector<std::string> peers = load_peers(peers_file);
