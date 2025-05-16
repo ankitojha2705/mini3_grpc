@@ -345,8 +345,7 @@ bool NodeServiceImpl::TryWorkStealing() {
               [](const auto& a, const auto& b) { return a.second > b.second; });
     
     for (const auto& [peer_id, queue_length] : peer_queues) {
-        std::cout << "Attempting to steal work from " << peer_id 
-                 << " (queue size: " << queue_length << ")" << std::endl;
+        std::cout << "[STEAL] Attempting to steal from " << peer_id << " (peer queue: " << queue_length << ", my queue: " << task_queue_.size() << ")" << std::endl;
         
         auto channel = grpc::CreateChannel(peer_id, grpc::InsecureChannelCredentials());
         auto stub = leader::NodeService::NewStub(channel);
@@ -361,12 +360,11 @@ bool NodeServiceImpl::TryWorkStealing() {
         grpc::Status status = stub->RequestWork(&context, request, &response);
         
         if (status.ok() && response.success()) {
-            std::cout << "Successfully stole " << response.tasks_size() << " tasks" << std::endl;
+            std::cout << "[STEAL] Successfully stole " << response.tasks_size() << " tasks from " << peer_id << std::endl;
             {
                 std::lock_guard<std::mutex> lock(queue_mutex_);
                 for (const auto& task : response.tasks()) {
-                    std::cout << "Stolen Task ID: " << task.task_id() 
-                             << " (steal count: " << task.steal_count() << ")" << std::endl;
+                    std::cout << "[STEAL] Stolen Task ID: " << task.task_id() << " (steal count: " << task.steal_count() << ")" << std::endl;
                     task_queue_.push(task);
                 }
                 std::cout << "New Queue Size: " << task_queue_.size() << std::endl;
